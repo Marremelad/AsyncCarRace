@@ -2,15 +2,15 @@
 
 public static class Race
 {
-    private const double Distance = 1000.0;
+    private const double Distance = 100.0;
     private static readonly Queue<Car> FinishingOrder = new Queue<Car>();
     private static readonly object LockQue = new object();
     
-    private static readonly List<Car> Cars =
+    internal static readonly List<Car> Cars =
     [
         new Car("Lightning McQueen", 350),
-        new Car("Chick Hicks", 300),
-        new Car("Strip Weathers", 250)
+        new Car("Chick Hicks", 350),
+        new Car("Strip Weathers", 350)
     ];
     
     public static void Run()
@@ -24,20 +24,26 @@ public static class Race
         car1.Start();
         car2.Start();
         car3.Start();
-        
         raceStatus.Start();
 
         car1.Join();
         car2.Join();
         car3.Join();
-
         raceStatus.Join();
         
         Console.WriteLine();
         lock (LockQue)
         {
             List<Car> podium = FinishingOrder.ToList();
+            Console.WriteLine($"                          {podium[0].Name,-10}\r\n" +
+                              $"                         @-----------------------@\r\n       {podium[1].Name,-10}" +
+                              $"        |           @           |\r\n@-----------------------@|           |           |\r\n|" +
+                              $"           @           ||           |           | {podium[2].Name,-10}\r\n|" +
+                              $"           |           ||           |           |@-----------------------@\r\n|           |           ||" +
+                              $"           |           ||           @           |");
         }
+
+        
     }
 
     private static void Go(Car car)
