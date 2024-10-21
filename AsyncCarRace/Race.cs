@@ -2,9 +2,12 @@
 
 public static class Race
 {
-    private const double Distance = 100.0;
+    private const double Distance = 1000.0;
     private static readonly Queue<Car> FinishingOrder = new Queue<Car>();
     private static readonly object LockQue = new object();
+
+    private static readonly Random random = new();
+    private static Queue<Event> Events = new Queue<Event>(5);
     
     internal static readonly List<Car> Cars =
     [
@@ -59,10 +62,23 @@ public static class Race
             FinishingOrder.Enqueue(car);
         }
     }
-
+    
+    private static void UpdateEvents(object state)
+    {
+        Car car = Cars[random.Next(Cars.Count())];
+        Events.Enqueue(new Event(car));
+        if(Events.Count > 5)
+        {
+            Event finishedEvent = Events.Dequeue();
+            finishedEvent.UndoEvent();
+        }
+        
+    }
     private static void RaceStatus(List<Car> cars)
     {
         Console.Clear();
+        Timer timer = new Timer(UpdateEvents, null, 0, 2000);
+        Random random = new();
 
         while (true)
         {
@@ -73,6 +89,14 @@ public static class Race
                 Console.WriteLine(car.DistanceTraveled < Distance 
                     ? $"{car.Name} : {car.DistanceTraveled:F2}" 
                     : $"{car.Name} has crossed the finish line");
+            }
+            Console.WriteLine("\n\n");
+            Console.WriteLine("Event Log:");
+
+
+            foreach (var e in Events)
+            {
+                Console.WriteLine(e);
             }
 
             lock (LockQue)
