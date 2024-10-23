@@ -3,15 +3,16 @@
 public static class Display
 {
     private static readonly object LockObject = new object();
-    public static Queue<string>? ListOfEvents = new Queue<string>();
+    public static List<string?> ListOfEvents = new List<string?>();
+    
     public static void DisplayRace(List<Car> cars)
     {
         Console.Clear();
 
         while (true)
         {
-            Console.SetCursorPosition(0, 0);
-        
+            Console.Clear();
+            
             foreach (var car in cars)
             {
                 if (car.Speed == 0) Console.WriteLine($"{car.Name} DNF".PadRight(70));
@@ -22,39 +23,35 @@ public static class Display
                         : $"{car.Name} has crossed the finish line".PadRight(70));
                 }
             }
-
+            Display.DisplayEvents();
+            
             lock (LockObject)
             {
                 if (Race.Podium?.Count >= Race.Cars.Count) break;
             }
+            
+            // Bug happens because when a car crashes it does not cross the finish line. And this loop keeps going until all cars cross the finish line.
             
             Thread.Sleep(100);
         }
     }
 
+    
     public static void DisplayEvents()
     {
-        while (true)
+        Console.Write("\nEvent log:");
+
+        int number = ListOfEvents.Count;
+        
+        for (int i = number; i > (number / 2); i--)
         {
-            Console.WriteLine();
-            
-            while (ListOfEvents?.Count > 0)
-            {
-                string e = ListOfEvents.Dequeue();
-                Console.WriteLine($"\n{e}");
-            }
-            
-            lock (LockObject)
-            {
-                if (Race.Podium?.Count >= Race.Cars.Count) break;
-            } 
-            
-            Thread.Sleep(1000);
+            Console.Write(ListOfEvents[i - 1]);
         }
     }
 
     public static void DisplayPodium()
     {
+        Console.Clear();
         lock (LockObject)
         {
             Console.WriteLine("\n" +

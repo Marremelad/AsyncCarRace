@@ -3,7 +3,7 @@
 public static class Race
 {
     private static readonly object LockObject = new object();
-    public const double RaceDistance = 1000.0;
+    public const double RaceDistance = 100.0;
     public static readonly List<Car>? Podium = new List<Car>();
     public static readonly List<Car> Cars = new List<Car>()
     {
@@ -31,14 +31,8 @@ public static class Race
             threads.Add(thread);
             thread.Start();
         }
-
-        Thread displayRace = new Thread(() => Display.DisplayRace(Cars));
-        threads.Add(displayRace);
-        displayRace.Start();
-
-        Thread displayEvents = new Thread(Display.DisplayEvents);
-        threads.Add(displayEvents);
-        displayEvents.Start();
+        
+        Display.DisplayRace(Cars);
         
         foreach (var thread in threads)
         {
@@ -50,17 +44,20 @@ public static class Race
 
     public static void Go(Car car)
     {
-        while (car.DistanceTraveled < RaceDistance)
+        while (true)
         {
             Thread.Sleep(100);
             car.DistanceTraveled += car.Speed / 36.0;
+
+            if (car.DistanceTraveled >= RaceDistance) break;
         }
+        
+        car.FinishedRace = true;
         
         lock (LockObject)
         {
             Podium?.Add(car);
         }
-
-        car.FinishedRace = true;
+        
     }
 }
