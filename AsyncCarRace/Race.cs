@@ -2,6 +2,8 @@
 
 public static class Race
 {
+    private static readonly object LockObject = new object();
+    private const double RaceDistance = 1000.0;
     public static List<Car>? Podium { get; set; }
     public static void Run()
     {
@@ -23,9 +25,18 @@ public static class Race
 
     public static void Go(Car car)
     {
-        while (true)
+        while (car.DistanceTraveled < RaceDistance)
         {
-            
+            while (car.DistanceTraveled < RaceDistance)
+            {
+                Thread.Sleep(100);
+                car.DistanceTraveled += car.Speed / 36.0;
+            }
+
+            lock (LockObject)
+            {
+                Podium?.Add(car);
+            }
         }
     }
 }
