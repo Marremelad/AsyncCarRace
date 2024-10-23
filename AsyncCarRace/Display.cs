@@ -3,6 +3,7 @@
 public static class Display
 {
     private static readonly object LockObject = new object();
+    public static Queue<string>? ListOfEvents = new Queue<string>();
     public static void DisplayRace(List<Car> cars)
     {
         Console.Clear();
@@ -13,9 +14,13 @@ public static class Display
         
             foreach (var car in cars)
             {
-                Console.WriteLine(car.DistanceTraveled < Race.RaceDistance
-                    ? $"{car.Name} : Speed - {car.Speed}: Distance - {car.DistanceTraveled:F2}" 
-                    : $"{car.Name} has crossed the finish line");
+                if (car.Speed == 0) Console.WriteLine($"{car.Name} DNF".PadRight(70));
+                else
+                {
+                    Console.WriteLine(car.DistanceTraveled < Race.RaceDistance
+                        ? $"{car.Name} : Speed - {car.Speed}: Distance - {car.DistanceTraveled:F2}".PadRight(70) 
+                        : $"{car.Name} has crossed the finish line".PadRight(70));
+                }
             }
 
             lock (LockObject)
@@ -24,6 +29,27 @@ public static class Display
             }
             
             Thread.Sleep(100);
+        }
+    }
+
+    public static void DisplayEvents()
+    {
+        while (true)
+        {
+            Console.WriteLine();
+            
+            while (ListOfEvents?.Count > 0)
+            {
+                string e = ListOfEvents.Dequeue();
+                Console.WriteLine($"\n{e}");
+            }
+            
+            lock (LockObject)
+            {
+                if (Race.Podium?.Count >= Race.Cars.Count) break;
+            } 
+            
+            Thread.Sleep(1000);
         }
     }
 

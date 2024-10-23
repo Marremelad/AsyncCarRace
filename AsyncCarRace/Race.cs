@@ -23,14 +23,22 @@ public static class Race
             threads.Add(thread);
             thread.Start();
         }
+        
+        for (int i = 0; i < 3; i++)
+        {
+            Car car = Cars[i];
+            Thread thread = new Thread(() => Events.GetEvent(car));
+            threads.Add(thread);
+            thread.Start();
+        }
 
         Thread displayRace = new Thread(() => Display.DisplayRace(Cars));
         threads.Add(displayRace);
         displayRace.Start();
 
-        Thread getEvent = new Thread(Events.GetEvent);
-        threads.Add(getEvent);
-        getEvent.Start();
+        Thread displayEvents = new Thread(Display.DisplayEvents);
+        threads.Add(displayEvents);
+        displayEvents.Start();
         
         foreach (var thread in threads)
         {
@@ -47,10 +55,12 @@ public static class Race
             Thread.Sleep(100);
             car.DistanceTraveled += car.Speed / 36.0;
         }
-
+        
         lock (LockObject)
         {
             Podium?.Add(car);
         }
+
+        car.FinishedRace = true;
     }
 }
