@@ -29,6 +29,18 @@ public static class Display
 
     public static void DisplayPodium(List<Car> cars)
     {
-        
+        lock (LockObject)
+        {
+            Console.WriteLine("\n" +
+                $"                          {Race.Podium?[0].Name,-10}\r\n" +
+                $"                         @-----------------------@\r\n" +
+                $"       {Race.Podium?[1].Name,-10}    |           @           |\r\n" +
+                $"@-----------------------@|           |           |\r\n" +
+                $"|           @           ||           |           | {Race.Podium?[2].Name,-10}\r\n" +
+                $"|           |           ||           |           |@-----------------------@\r\n" +
+                $"|           |           ||           |           ||           @           |"
+            );
+
+        }
     }
 }
