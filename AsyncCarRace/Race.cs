@@ -23,30 +23,41 @@ public static class Race
             threads.Add(thread);
             thread.Start();
         }
-
-        Thread displayRace = new Thread(() => Display.DisplayRace(Cars));
-        threads.Add(displayRace);
-        displayRace.Start();
+        
+        for (int i = 0; i < 3; i++)
+        {
+            Car car = Cars[i];
+            Thread thread = new Thread(() => Events.GetEvent(car));
+            threads.Add(thread);
+            thread.Start();
+        }
+        
+        Display.DisplayRace(Cars);
         
         foreach (var thread in threads)
         {
             thread.Join();
         }
         
-        Display.DisplayPodium(Cars);
+        Display.DisplayPodium();
     }
 
     public static void Go(Car car)
     {
-        while (car.DistanceTraveled < RaceDistance)
+        while (true)
         {
             Thread.Sleep(100);
             car.DistanceTraveled += car.Speed / 36.0;
-        }
 
+            if (car.DistanceTraveled >= RaceDistance) break;
+        }
+        
+        car.FinishedRace = true;
+        
         lock (LockObject)
         {
             Podium?.Add(car);
         }
+        
     }
 }
