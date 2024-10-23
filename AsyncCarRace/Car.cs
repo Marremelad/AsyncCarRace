@@ -2,15 +2,14 @@
 
 public class Car
 {
-    public string? Name { get; set; }
+    private string? Name { get; set; }
     public int Speed { get; set; }
-    public double DistanceTraveled { get; set; }
+    private readonly double _distanceTraveled = 0;
     
 
-    public Car(string name, int sped, double distanceTraveled)
+    public Car(string name, int sped)
     {
         Name = name;
         Speed = sped;
-        DistanceTraveled = distanceTraveled;
     }
 }
