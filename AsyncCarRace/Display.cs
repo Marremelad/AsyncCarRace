@@ -1,6 +1,12 @@
 ﻿namespace AsyncCarRace;
 
-public class Display
+public static class Display
 {
-    
+    public static void DisplayRace()
+    {
+        while (true)
+        {
+            Console.
+        }
+    }
 }
