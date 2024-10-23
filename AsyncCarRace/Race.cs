@@ -3,7 +3,7 @@
 public static class Race
 {
     private static readonly object LockObject = new object();
-    public const double RaceDistance = 100.0;
+    public const double RaceDistance = 1000.0;
     public static readonly List<Car>? Podium = new List<Car>();
     public static readonly List<Car> Cars = new List<Car>()
     {
@@ -27,6 +27,10 @@ public static class Race
         Thread displayRace = new Thread(() => Display.DisplayRace(Cars));
         threads.Add(displayRace);
         displayRace.Start();
+
+        Thread getEvent = new Thread(Events.GetEvent);
+        threads.Add(getEvent);
+        getEvent.Start();
         
         foreach (var thread in threads)
         {
