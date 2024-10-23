@@ -14,15 +14,26 @@ public static class Race
     
     public static void Run()
     {
+        List<Thread> threads = new List<Thread>();
         
-
         for (int i = 0; i < 3; i++)
         {
             Car car = Cars[i];
             Thread thread = new Thread(() => Go(car));
+            threads.Add(thread);
             thread.Start();
         }
+
+        Thread displayRace = new Thread(() => Display.DisplayRace(Cars));
+        threads.Add(displayRace);
+        displayRace.Start();
         
+        foreach (var thread in threads)
+        {
+            thread.Join();
+        }
+        
+        Console.WriteLine("Hello");
     }
 
     public static void Go(Car car)
