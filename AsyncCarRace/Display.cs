@@ -3,7 +3,7 @@
 public static class Display
 {
     private static readonly object LockObject = new object();
-    private static void DisplayRace(List<Car> cars)
+    public static void DisplayRace(List<Car> cars)
     {
         Console.Clear();
 
@@ -23,7 +23,12 @@ public static class Display
                 if (Race.Podium?.Count >= Race.Cars.Count) break;
             }
             
-            System.Threading.Thread.Sleep(100);
+            Thread.Sleep(100);
         }
+    }
+
+    public static void DisplayPodium(List<Car> cars)
+    {
+        
     }
 }
