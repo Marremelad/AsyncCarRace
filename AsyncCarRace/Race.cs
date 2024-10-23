@@ -3,20 +3,22 @@
 public static class Race
 {
     private static readonly object LockObject = new object();
-    private const double RaceDistance = 1000.0;
+    public const double RaceDistance = 1000.0;
     public static List<Car>? Podium { get; set; }
+    public static List<Car> Cars = new List<Car>()
+    {
+        new Car("Lightning McQueen"),
+        new Car("Chick Hicks"),
+        new Car("Strip Weathers"),
+    };
+    
     public static void Run()
     {
-        List<Car> cars = new List<Car>()
-        {
-            new Car("Lightning McQueen"),
-            new Car("Chick Hicks"),
-            new Car("Strip Weathers"),
-        };
+        
 
         for (int i = 0; i < 3; i++)
         {
-            Car car = cars[i];
+            Car car = Cars[i];
             Thread thread = new Thread(() => Go(car));
             thread.Start();
         }
