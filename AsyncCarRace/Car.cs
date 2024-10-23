@@ -3,8 +3,8 @@
 public class Car
 {
     private string? Name { get; set; }
-    private int _speed = 120;
-    private readonly double _distanceTraveled = 0;
+    public int Speed = 120;
+    public readonly double DistanceTraveled = 0;
     
 
     public Car(string name)
