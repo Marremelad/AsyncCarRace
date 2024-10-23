@@ -27,7 +27,7 @@ public static class Display
         }
     }
 
-    public static void DisplayPodium(List<Car> cars)
+    public static void DisplayPodium()
     {
         lock (LockObject)
         {

@@ -33,7 +33,7 @@ public static class Race
             thread.Join();
         }
         
-        Display.DisplayPodium(Cars);
+        Display.DisplayPodium();
     }
 
     public static void Go(Car car)
