@@ -14,7 +14,7 @@ public static class Display
             foreach (var car in cars)
             {
                 Console.WriteLine(car.DistanceTraveled < Race.RaceDistance
-                    ? $"{car.Name} : {car.DistanceTraveled:F2}" 
+                    ? $"{car.Name} : Speed - {car.Speed}: Distance - {car.DistanceTraveled:F2}" 
                     : $"{car.Name} has crossed the finish line");
             }
 
