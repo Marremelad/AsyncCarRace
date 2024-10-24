@@ -2,7 +2,7 @@
 
 public static class Display
 {
-    private static readonly object LockObject = new object();
+    // private static readonly object LockObject = new object();
     public static readonly List<string?> ListOfEvents = new List<string?>();
     
     public static void DisplayRace(List<Car> cars)
@@ -13,22 +13,19 @@ public static class Display
             
             foreach (var car in cars)
             {
-                if (car.PitStop) Console.WriteLine($"{car.Name} Pit Stop".PadRight(70));
-                else if (car.HasCrashed) Console.WriteLine($"{car.Name} DNF".PadRight(70));
+                if (car.PitStop) Console.WriteLine($"{car.Name} Pit Stop");
+                else if (car.HasCrashed) Console.WriteLine($"{car.Name} DNF");
                 else
                 {
                     Console.WriteLine(car.DistanceTraveled < Race.RaceDistance
-                        ? $"{car.Name} : Speed - {car.Speed}: Distance - {car.DistanceTraveled:F2}".PadRight(70) 
-                        : $"{car.Name} has crossed the finish line".PadRight(70));
+                        ? $"{car.Name} : Speed - {car.Speed}: Distance - {car.DistanceTraveled:F2}" 
+                        : $"{car.Name} has crossed the finish line");
                 }
             }
-            Display.DisplayEvents();
+            DisplayEvents();
             
-            lock (LockObject)
-            {
-                var hasFinishedOrCrashed = Race.Cars.All(car => car.FinishedRace || car.HasCrashed);
-                if (hasFinishedOrCrashed) break;
-            }
+            var hasFinishedOrCrashed = Race.Cars.All(car => car.FinishedRace || car.HasCrashed);
+            if (hasFinishedOrCrashed) break;
             
             // Bug happens because when a car crashes it does not cross the finish line. And this loop keeps going until all cars cross the finish line.
             

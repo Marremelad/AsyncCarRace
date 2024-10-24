@@ -3,7 +3,7 @@
 public static class Race
 {
     private static readonly object LockObject = new object();
-    public const double RaceDistance = 10000.0;
+    public const double RaceDistance = 100.0;
     public static readonly List<string?> Podium = new List<string?>();
     public static readonly List<Car> Cars = new List<Car>()
     {
