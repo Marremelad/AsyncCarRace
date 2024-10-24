@@ -43,7 +43,7 @@ public static class Display
 
         int number = ListOfEvents.Count;
         
-        for (int i = number; i > (number / 2); i--)
+        for (int i = number; i > number; i--)
         {
             Console.Write(ListOfEvents[i - 1]);
         }
