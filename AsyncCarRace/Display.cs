@@ -3,19 +3,18 @@
 public static class Display
 {
     private static readonly object LockObject = new object();
-    public static List<string?> ListOfEvents = new List<string?>();
+    public static readonly List<string?> ListOfEvents = new List<string?>();
     
     public static void DisplayRace(List<Car> cars)
     {
-        Console.Clear();
-
         while (true)
         {
             Console.Clear();
             
             foreach (var car in cars)
             {
-                if (car.Speed == 0) Console.WriteLine($"{car.Name} DNF".PadRight(70));
+                if (car.PitStop) Console.WriteLine($"{car.Name} Pit Stop".PadRight(70));
+                else if (car.HasCrashed) Console.WriteLine($"{car.Name} DNF".PadRight(70));
                 else
                 {
                     Console.WriteLine(car.DistanceTraveled < Race.RaceDistance
@@ -27,7 +26,8 @@ public static class Display
             
             lock (LockObject)
             {
-                if (Race.Podium?.Count >= Race.Cars.Count) break;
+                var hasFinishedOrCrashed = Race.Cars.All(car => car.FinishedRace || car.HasCrashed);
+                if (hasFinishedOrCrashed) break;
             }
             
             // Bug happens because when a car crashes it does not cross the finish line. And this loop keeps going until all cars cross the finish line.
@@ -37,33 +37,28 @@ public static class Display
     }
 
     
-    public static void DisplayEvents()
+    private static void DisplayEvents()
     {
         Console.Write("\nEvent log:");
 
-        int number = ListOfEvents.Count;
-        
-        for (int i = number; i > (number / 2); i--)
+        foreach (var e in ListOfEvents)
         {
-            Console.Write(ListOfEvents[i - 1]);
+            Console.Write(e);
         }
-    }
+    }   
 
     public static void DisplayPodium()
     {
         Console.Clear();
-        lock (LockObject)
-        {
-            Console.WriteLine("\n" +
-                              $"                          {Race.Podium?[0].Name,-15}\r\n" +
-                              $"                         @-----------------------@\r\n" +
-                              $"       {Race.Podium?[1].Name,-15}    |           @           |\r\n" +
-                              $"@-----------------------@|           |           |\r\n" +
-                              $"|           @           ||           |           | {Race.Podium?[2].Name,-15}\r\n" +
-                              $"|           |           ||           |           |@-----------------------@\r\n" +
-                              $"|           |           ||           |           ||           @           |"
-            );
-
-        }
+        
+        Console.WriteLine("\n" +
+                          $"                          {Race.Podium?[0] ?? "",15 }\r\n" +
+                          $"                         @-----------------------@\r\n" +
+                          $"       {Race.Podium?[1] ?? "",-15}    |           @           |\r\n" +
+                          $"@-----------------------@|           |           |\r\n" +
+                          $"|           @           ||           |           | {Race.Podium?[2] ?? "",-15}\r\n" +
+                          $"|           |           ||           |           |@-----------------------@\r\n" +
+                          $"|           |           ||           |           ||           @           |"
+        );
     }
 }
