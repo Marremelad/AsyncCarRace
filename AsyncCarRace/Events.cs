@@ -4,7 +4,7 @@ namespace AsyncCarRace;
 
 public static class Events
 {
-    
+    private const int ThreadTimer = 1000;
     private static readonly object LockObject = new object();
     private static readonly Random Random = new Random();
     
@@ -12,9 +12,9 @@ public static class Events
     {
 
         int timer = 0;
-        while (!car.FinishedRace)
+        while (!car.FinishedRace && !car.HasCrashed)
         {
-            Thread.Sleep(10000);
+            Thread.Sleep(ThreadTimer);
             timer += 1;
             
             if (car.Speed == 300 && timer == 2)
@@ -23,13 +23,13 @@ public static class Events
 
                 int randomEvent = Random.Next(1, 101);
                 
-                if (randomEvent is > 61 and < 96)
+                if (randomEvent is > 71 and < 99)
                 {
                     Display.ListOfEvents?.Add($"\n{car.Name} got some dirt on the windshield!");
                     car.Speed = (int)(car.Speed / 1.2);
                     UndoEvent(car, 5);
                 }
-                else if (randomEvent is > 51 and < 61)
+                else if (randomEvent is > 61 and < 72)
                 {
                     Display.ListOfEvents?.Add($"\n{car.Name} got a flat tire and has to make a pit stop!");
                     car.Speed = 0;
@@ -37,7 +37,7 @@ public static class Events
                     UndoEvent(car, 10);
                     car.PitStop = false;
                 }
-                else if (randomEvent is > 95 and < 101)
+                else if (randomEvent is > 98 and < 101)
                 {
                     Display.ListOfEvents?.Add($"\n{car.Name} crashes and is out of the race!");
                     car.Speed = 0;
