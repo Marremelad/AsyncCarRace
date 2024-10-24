@@ -14,10 +14,10 @@ public static class Events
         int timer = 0;
         while (!car.FinishedRace)
         {
-            Thread.Sleep(10000);
+            Thread.Sleep(1000);
             timer += 1;
             
-            if (car.Speed == 300 && timer == 2)
+            if (car.Speed == 300 && timer == 5)
             {
                 timer = 0;
 
@@ -33,9 +33,7 @@ public static class Events
                 {
                     Display.ListOfEvents?.Add($"\n{car.Name} got a flat tire and has to make a pit stop!");
                     car.Speed = 0;
-                    car.PitStop = true;
                     UndoEvent(car, 10);
-                    car.PitStop = false;
                 }
                 else if (randomEvent is > 95 and < 101)
                 {
