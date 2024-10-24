@@ -3,8 +3,9 @@
 public static class Race
 {
     private static readonly object LockObject = new object();
-    public const double RaceDistance = 100.0;
+    public const double RaceDistance = 3000.0;
     public static readonly List<string?> Podium = new List<string?>();
+    private static readonly List<Car> Crashed = new List<Car>();
     public static readonly List<Car> Cars = new List<Car>()
     {
         new Car("Lightning McQueen"),
@@ -38,24 +39,42 @@ public static class Race
         {
             thread.Join();
         }
+
+        foreach (var car in Crashed.OrderByDescending(c => c.DistanceTraveled))
+        {
+            Podium.Add(car.Name);
+        }
         
+        Thread.Sleep(3000);
         Display.DisplayPodium();
     }
 
-    public static void Go(Car car)
+    private static void Go(Car car)
     {
-        while (car.DistanceTraveled < RaceDistance)
+        while (true)
         {
             Thread.Sleep(100);
             car.DistanceTraveled += car.Speed / 36.0;
+
+            if (car.DistanceTraveled >= RaceDistance)
+            {
+                car.FinishedRace = true;
+                
+                lock (LockObject)
+                {
+                    Podium.Add(car.Name);
+                }
+                break;
+            }
+
+            if (car.HasCrashed)
+            {
+                lock (LockObject)
+                {
+                    Crashed.Add(car);
+                }
+                break;
+            }
         }
-        
-        car.FinishedRace = true;
-        
-        lock (LockObject)
-        {
-            Podium?.Add(car.Name);
-        }
-        
     }
 }
