@@ -11,39 +11,52 @@ public static class Events
     public static void GetEvent(Car car)
     {
 
-        while (true)
+        int timer = 0;
+        while (!car.FinishedRace)
         {
-            Thread.Sleep(100);
-            if (car.Speed == 300)
+            Thread.Sleep(10000);
+            timer += 1;
+            
+            if (car.Speed == 300 && timer == 2)
             {
+                timer = 0;
+
                 int randomEvent = Random.Next(1, 101);
                 
-                switch (randomEvent)
-                {   
-                    case > 0 and < 51:
-                        break;
-                    
-                    case > 61 and < 96:
-                        Display.ListOfEvents?.Add($"\n{car.Name} got some dirt on the windshield!");
-                        car.Speed = (int)(car.Speed / 1.2);
-                        // Thread.Sleep(5000); Causes the program to wait if event occurs right before finish line.
-                        // car.Speed = 300;
-                        break;
-                    
-                    case > 50 and < 61:
-                        Display.ListOfEvents?.Add($"\n{car.Name} got a flat tire!");
-                        car.Speed = car.Speed / 2;
-                        break;
-                    
-                    case > 95 and < 101:
-                        Display.ListOfEvents?.Add($"\n{car.Name} crashes and is out of the race!");
-                        car.Speed = 150;
-                        // car.Speed = 0; Causes thread freeze because car does not cross finish line.
-                        // car.FinishedRace = true; 
-                        break;
+                if (randomEvent is > 61 and < 96)
+                {
+                    Display.ListOfEvents?.Add($"\n{car.Name} got some dirt on the windshield!");
+                    car.Speed = (int)(car.Speed / 1.2);
+                    UndoEvent(car, 5);
+                }
+                else if (randomEvent is > 51 and < 61)
+                {
+                    Display.ListOfEvents?.Add($"\n{car.Name} got a flat tire and has to make a pit stop!");
+                    car.Speed = 0;
+                    car.PitStop = true;
+                    UndoEvent(car, 10);
+                    car.PitStop = false;
+                }
+                else if (randomEvent is > 95 and < 101)
+                {
+                    Display.ListOfEvents?.Add($"\n{car.Name} crashes and is out of the race!");
+                    car.Speed = 0;
+                    car.HasCrashed = true;
                 }
             }
-            if (car.FinishedRace) break;
         }
+    }
+
+    private static void UndoEvent(Car car, int seconds)
+    {
+        int timer = 0;
+        while (timer != seconds)
+        {
+            if (car.FinishedRace) break;
+            Thread.Sleep(1000);
+            timer += 1;
+            
+        }
+        car.Speed = 300;
     }
 }

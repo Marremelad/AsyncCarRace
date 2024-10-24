@@ -3,8 +3,13 @@
 public static class Race
 {
     private static readonly object LockObject = new object();
+<<<<<<< HEAD
     public const double RaceDistance = 1000.0;
     public static readonly List<Car>? Podium = new List<Car>();
+=======
+    public const double RaceDistance = 100.0;
+    public static readonly List<string?> Podium = new List<string?>();
+>>>>>>> refactor
     public static readonly List<Car> Cars = new List<Car>()
     {
         new Car("Lightning McQueen"),
@@ -54,7 +59,7 @@ public static class Race
         
         lock (LockObject)
         {
-            Podium?.Add(car);
+            Podium?.Add(car.Name);
         }
         
     }
