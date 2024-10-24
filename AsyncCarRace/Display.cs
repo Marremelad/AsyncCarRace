@@ -15,12 +15,12 @@ public static class Display
             
             foreach (var car in cars)
             {
-                if (car.Speed == 0) Console.WriteLine($"{car.Name} DNF".PadRight(70));
+                if (car.Speed == 0) Console.WriteLine($"{car.Name} DNF");
                 else
                 {
                     Console.WriteLine(car.DistanceTraveled < Race.RaceDistance
-                        ? $"{car.Name} : Speed - {car.Speed}: Distance - {car.DistanceTraveled:F2}".PadRight(70) 
-                        : $"{car.Name} has crossed the finish line".PadRight(70));
+                        ? $"{car.Name} : Speed - {car.Speed}: Distance - {car.DistanceTraveled:F2}" 
+                        : $"{car.Name} has crossed the finish line");
                 }
             }
             Display.DisplayEvents();
@@ -37,7 +37,7 @@ public static class Display
     }
 
     
-    public static void DisplayEvents()
+    private static void DisplayEvents()
     {
         Console.Write("\nEvent log:");
 

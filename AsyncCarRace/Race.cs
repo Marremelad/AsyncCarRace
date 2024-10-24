@@ -44,12 +44,10 @@ public static class Race
 
     public static void Go(Car car)
     {
-        while (true)
+        while (car.DistanceTraveled < RaceDistance)
         {
             Thread.Sleep(100);
             car.DistanceTraveled += car.Speed / 36.0;
-
-            if (car.DistanceTraveled >= RaceDistance) break;
         }
         
         car.FinishedRace = true;
